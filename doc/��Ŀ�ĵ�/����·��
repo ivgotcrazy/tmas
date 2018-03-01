@@ -1,0 +1,54 @@
+
+1. SVN
+
+SVN代码库部署在192.168.0.191服务器上，SVN路径在/var/svn/broadinter/
+
+2. 代码目录结构
+
+broadinter--
+           |
+	         |--broadcache--
+	         |             |--code-- <-代码路径
+	         |             |       |--branches
+           |             |       |--tags--
+           |             |       |--trunk--
+           |             |                |--http
+           |             |                |--p2p--
+           |             |                       |--bcrm       <-BroadCache远程管理诊断子系统代码
+           |             |                       |--protobuf   <-所有和protobuf相关的代码
+           |             |                       |--pub        <-BroadCache工程下公共代码
+           |             |                       |--rcs        <-缓存子系统代码
+           |             |                       |--tool       <-一些测试工具代码
+           |             |                       |--ugs        <-用户引导子系统代码
+           |             |                       |--ut         <-单元测试代码
+           |             |                        
+           |             |--doc  <-BroadCache所有文档
+           |
+           |--pub  <-全局公共代码
+           |
+           |--tmas--
+           |       |--code--
+           |       |       |--branches--
+           |       |       |           |--no-template  <-未使用模板的报文处理框架分支版本
+           |       |       |           |--pcap-branche <-使用pcap作为底层抓包框架的分支版本
+           |       |       |--tags
+           |       |       |--trunk--
+           |       |                |--build  <-makefile
+           |       |                |--config <-配置文件
+           |       |                |--src    <-源代码
+           |       |                |--tool   <-测试工具代码
+           |       |                |--ut     <-单元测试
+           |       |
+           |       |--doc <-TMAS所有文档
+           |
+           |--tool <-一些工具脚本
+           
+3. 远程代码备份
+
+备份服务器：122.11.48.165
+备份路径：/var/zhouhh/broadinter.tar.gz
+备份脚本：broadinter/tool/bakup_code.sh
+
+4. 账号与密码
+
+root用户密码：broadinter

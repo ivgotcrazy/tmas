@@ -1,0 +1,76 @@
+/*#############################################################################
+ * 文件名   : pkt_processor.hpp
+ * 创建人   : teck_zhou	
+ * 创建时间 : 2014年01月02日
+ * 文件描述 : PktProcessor类声明
+ * 版权声明 : Copyright (c) 2014 BroadInter. All rights reserved.
+ * ##########################################################################*/
+
+#ifndef BROADINTER_PKT_PROCESSOR
+#define BROADINTER_PKT_PROCESSOR
+
+#include <boost/noncopyable.hpp>
+#include <boost/enable_shared_from_this.hpp>
+
+#include "tmas_typedef.hpp"
+
+namespace BroadInter
+{
+
+
+class PktProcessor
+{
+public:
+	virtual bool ProcessPkt(const Packet& pkt) = 0;
+	virtual ~PktProcessor() {}
+
+	void set_successor(const PktProcessorSP& processor) { successor_ = processor; }
+	PktProcessorSP get_successor() const { return successor_; }
+
+protected:
+	PktProcessorSP successor_;
+};
+
+class RespChainPktProcessor : public PktProcessor
+{
+public:
+	virtual bool ProcessPkt(const Packet& pkt) override;
+
+private:
+	virtual bool DoProcess(const Packet& pkt) = 0;
+};
+
+/*******************************************************************************
+ * 描  述: 数据包处理类的基类
+ * 作  者: teck_zhou
+ * 时  间: 2013年12月24日
+ ******************************************************************************/
+class PktProcessor : public boost::noncopyable, 
+	                 public boost::enable_shared_from_this<PktProcessor>
+{
+public:
+    virtual ~PktProcessor() {}
+
+	// 直接设置后继处理器
+	void SetSuccessor(const PktProcessorSP& successor) { successor_ = successor; }
+
+	// 在处理链尾部添加处理器
+	void AppendProcessor(const PktProcessorSP& successor); 
+
+	// 处理捕获的数据包
+    void HandlePkt(const Packet& pkt);
+
+private:
+	// 处理捕获的数据包，返回值表示报文是否需要继续往下处理
+	// true: 需要继续处理，false: 不需要继续处理
+    virtual bool ProcessPkt(const Packet& pkt) = 0;
+	
+	PktProcessorSP GetSuccessor() { return successor_; }
+
+private:
+    PktProcessorSP successor_;  // 继任报文处理器
+};
+
+}
+
+#endif
